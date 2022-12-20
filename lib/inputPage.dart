@@ -1,17 +1,12 @@
+import 'package:bmi_calculator/BMICalculator.dart';
+import 'package:bmi_calculator/resultPage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'reusableIcon.dart';
 import 'reusableCard.dart';
+import 'styles.dart';
+import 'BMICalculator.dart';
 
-const bottomContainerHeight = 80;
-const activeCardColor = Color(0xFF111328);
-const inactiveCardColor = Color(0xFF1D1E33);
-const bottomContainerColor = Color(0xFFEB1555);
-const labelStyle = TextStyle(color: Color(0xFF8D8E98), fontSize: 18);
-const digitStyle = TextStyle(fontSize: 50, fontWeight: FontWeight.w900);
-int height = 180;
-int weight = 80;
-int age = 18;
 class InputPage extends StatefulWidget {
   @override
   _InputPageState createState() => _InputPageState();
@@ -153,77 +148,120 @@ class _InputPageState extends State<InputPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          FloatingActionButton(onPressed: (){
-                            setState(() {
-                              weight--;
-                            });
-                          },
-                            child: Icon(FontAwesomeIcons.minus,color: Colors.white),
-                            backgroundColor: Color(0xFF4C4F5E),),
-                          SizedBox(width: 10,),
-                        FloatingActionButton(onPressed: (){
-                          setState(() {
-                            weight++;
-                          });
-                        },
-                        child: Icon(FontAwesomeIcons.plus,color: Colors.white),
-                        backgroundColor: Color(0xFF4C4F5E),),
-
-                      ],)
+                          FloatingActionButton(
+                            onPressed: () {
+                              setState(() {
+                                weight--;
+                              });
+                            },
+                            child: Icon(FontAwesomeIcons.minus,
+                                color: Colors.white),
+                            backgroundColor: Color(0xFF4C4F5E),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          FloatingActionButton(
+                            onPressed: () {
+                              setState(() {
+                                weight++;
+                              });
+                            },
+                            child: Icon(FontAwesomeIcons.plus,
+                                color: Colors.white),
+                            backgroundColor: Color(0xFF4C4F5E),
+                          ),
+                        ],
+                      )
                     ],
                   ),
                 )),
                 Expanded(
                     child: ReusableCard(
                   cardColor: inactiveCardColor,
-                      cardChild: Column(
+                  cardChild: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "AGE",
+                        style: labelStyle,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
                         mainAxisAlignment: MainAxisAlignment.center,
+                        textBaseline: TextBaseline.alphabetic,
                         children: [
                           Text(
-                            "AGE",
-                            style: labelStyle,
+                            age.toString(),
+                            style: digitStyle,
                           ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.baseline,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            textBaseline: TextBaseline.alphabetic,
-                            children: [
-                              Text(
-                                age.toString(),
-                                style: digitStyle,
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              FloatingActionButton(onPressed: (){
-                                setState(() {
-                                  age--;
-                                });
-                              },
-                                child: Icon(FontAwesomeIcons.minus,color: Colors.white),
-                                backgroundColor: Color(0xFF4C4F5E),),
-                              SizedBox(width: 10,),
-                              FloatingActionButton(onPressed: (){
-                                setState(() {
-                                  age++;
-                                });
-                              },
-                                child: Icon(FontAwesomeIcons.plus,color: Colors.white),
-                                backgroundColor: Color(0xFF4C4F5E),),
-
-                            ],)
                         ],
                       ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          FloatingActionButton(
+                            onPressed: () {
+                              setState(() {
+                                age--;
+                              });
+                            },
+                            child: Icon(FontAwesomeIcons.minus,
+                                color: Colors.white),
+                            backgroundColor: Color(0xFF4C4F5E),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          FloatingActionButton(
+                            onPressed: () {
+                              setState(() {
+                                age++;
+                              });
+                            },
+                            child: Icon(FontAwesomeIcons.plus,
+                                color: Colors.white),
+                            backgroundColor: Color(0xFF4C4F5E),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 )),
               ],
             )),
-            Container(
-              color: bottomContainerColor,
-              margin: EdgeInsets.only(top: 10),
-              width: double.infinity,
-              height: bottomContainerHeight.toDouble(),
+            GestureDetector(
+              onTap: () {
+                CalculatorBrain cal =
+                    CalculatorBrain(height: height.toDouble(), weight: weight.toDouble());
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ResultsPage(
+                      bmiInter: cal.getInter(),
+                      bmiResult: cal.CalculateBMI().toStringAsFixed(1),
+                      bmiResultText: cal.getResult(),
+                    ),
+                  ),
+                );
+              },
+              child: Container(
+                child: Center(
+                  child: Text(
+                    'CALCULATE',
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                color: bottomContainerColor,
+                margin: EdgeInsets.only(top: 10),
+                padding: EdgeInsets.only(bottom: 20),
+                width: double.infinity,
+                height: bottomContainerHeight.toDouble(),
+              ),
             )
           ],
         ));
